@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  <form>
+    <fieldset id="cara">
+      <legend>Caracteristique</legend>
+      <label>Point de vie</label>
+      <input type="number" name="pv" id="pv" disabled="disabled">
+    </br>
+    <label>Rapidité</label>
+    <input type="number" name="rap" id="rap" disabled="disabled" class="rd_cara">
+    <label>Courage</label>
+    <input type="number" name="cou" id="cou" disabled="disabled" class="rd_cara">
+    <label>Force</label>
+    <input type="number" name="for" id="for" disabled="disabled" class="rd_cara">
+    <label>Habilité</label>
+    <input type="number" name="hab" id="hab" disabled="disabled" class="rd_cara">
+    <label>PSI</label>
+    <input type="number" name="psi" id="psi" disabled="disabled" class="rd_cara">
+    <input type="button" value="Lance les dés" id="dice">
+  </fieldset>
+  <fieldset>
+    <legend>Combats</legend>
+    <input type="button" value="Combats" id="showcombat">
+    <div hidden="true" id="combatsdiv">
+    <fieldset id="you">
+      <legend>Vous</legend>
+      <label>Point de vie</label>
+      <input type="number" name="hcom_pv" id="hcom_pv1" disabled="disabled">
+      <label>Rapidité</label>
+      <input type="number" name="hcom_rap" id="hcom_rap2" disabled="disabled">
+      <label>Courage</label>
+      <input type="number" name="hcom_cou" id="hcom_cou3" disabled="disabled">
+      <label>Force</label>
+      <input type="number" name="hcom_for" id="hcom_for4" disabled="disabled">
+      <label>Habilité</label>
+      <input type="number" name="hcom_hab" id="hcom_hab5" disabled="disabled">
+      <label>PSI</label>
+      <input type="number" name="hcom_psi" id="hcom_psi6" disabled="disabled">
+    </fieldset>
+    <fieldset>
+      <legend>Monstres</legend>
+      <label>Point de vie</label>
+      <input type="number" name="mcom_pv" id="mcom_pv">
+      <label>Rapidité</label>
+      <input type="number" name="mcom_rap" id="mcom_rap" class="rd_cara_mon">
+      <label>Courage</label>
+      <input type="number" name="mcom_cou" id="mcom_cou" class="rd_cara_mon">
+      <label>Force</label>
+      <input type="number" name="mcom_for" id="mcom_for" class="rd_cara_mon">
+      <label>Habilité</label>
+      <input type="number" name="mcom_hab" id="mcom_hab" class="rd_cara_mon">
+      <label>PSI</label>
+      <input type="number" name="mcom_psi" id="mcom_psi" class="rd_cara_mon">
+    </fieldset>
+  </div>
+  </fieldset>
+
+  <input type="button" value="test" id="test">
+</form>
+<script src="assets/js/jquery-3.4.1.min.js"></script>
+<script type="text/javascript">
+  function getRandomInt(min, max) {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  }
+  
+  function newperso() {
+    var randomcara = [];
+    $('#pv').val('100');
+    $('.rd_cara').each(function() {
+      randomcara.push($(this).val(getRandomInt(1, 6)))
+    })
+  };
+  
+  function firstattack() {
+    a = getRandomInt(1, 6);
+    console.log('d1:', a);
+    b = getRandomInt(1, 6);
+    console.log('d2:', b);
+    var hfirst = a + parseInt($("#hcom_rap2").val(), 10) + parseInt($("#hcom_cou3").val(), 10);
+    var mfirst = b + parseInt($("#mcom_rap").val(), 10) + parseInt($("#mcom_cou").val(), 10);
+    console.log('hfirst:', hfirst);
+    console.log('mfirst:', mfirst);
+    if ( hfirst > mfirst) {
+      console.log("Hero first hit");
+    }
+    else if ( hfirst == mfirst) {
+      console.log("Equal");
+    }
+    else {
+      console.log("Monster first hit");
+    }
+  };
+  
+  function preparecombat() {
+    var hero = $("#cara input[type='number']");
+    var herocomb = $("#you input[type='number']");
+    for (var i = 0; i < hero.length; i++) {
+      var heroValue = hero.eq(i).val();
+      var herocombId = $("#you input[type='number']")[i].id;
+      $("#" + herocombId).val(heroValue);
+    };
+  };
+
+  function hit() {
+    d1 = getRandomInt(1, 6);
+    d2 = getRandomInt(1, 6);
+    sum = d1 + d2;
+    console.log('d1:', d1);
+    console.log('d2:', d2);
+    console.log('sum:', sum);
+  };
+
+  $("#dice").on('click',function(e) {
+    var answer=confirm('Attention remise a zero des caracteristiques.');
+    if(answer){
+      newperso();
+    }
+    else{
+      e.preventDefault();      
+    }
+  });
+
+  $("#showcombat").on('click',function(e) {
+    e.preventDefault();
+    $("#combatsdiv").show;
+    console.log('test');
+    $("#w3s").attr("href", "https://www.w3schools.com/jquery/");
+  });
+  
+  /*$("#copyvalues").on("click", function (e) {
+    e.preventDefault();
+    var hero = $("#cara input[type='number']");
+    var herocomb = $("#you input[type='number']");
+    for (var i = 0; i < hero.length; i++) {
+      var heroValue = hero.eq(i).val();
+      var herocombId = $("#you input[type='number']")[i].id;
+      $("#" + herocombId).val(heroValue);
+    }
+  });*/
+
+  $('#test').on("click",test);
+
+  function dummymonster() {
+  var randommon = [];
+    $('#mcom_pv').val('50');
+    $('.rd_cara_mon').each(function() {
+      randommon.push($(this).val(getRandomInt(1, 6)))
+    })
+  };
+
+
+function test() {
+  console.log('News session-----------');
+  newperso();
+  preparecombat();
+  dummymonster();
+  firstattack();
+  hit();
+};
+
+
+  
+  
+</script>
+
+</body>
+</html>
